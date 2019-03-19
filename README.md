@@ -122,15 +122,26 @@ OP_RETURN
 
 *1 signature*:
 
-File: https://www.bitcoinfiles.org/bd5b707d4ab4caef96ff45296738c648e9d9db82ba0df2377eb95a8a6bf7e6a9?
+File:
+
+https://www.bitcoinfiles.org/bd5b707d4ab4caef96ff45296738c648e9d9db82ba0df2377eb95a8a6bf7e6a9?
+
+
 Transaction:
+
 https://whatsonchain.com/tx/bd5b707d4ab4caef96ff45296738c648e9d9db82ba0df2377eb95a8a6bf7e6a9?
 
 
 *2 signatures*:
 
-File: https://www.bitcoinfiles.org/aed4adf1e77d2a913af14243beca11ff1c988c9a158db208a83de15f51467c81?
-Transaction: https://whatsonchain.com/tx/aed4adf1e77d2a913af14243beca11ff1c988c9a158db208a83de15f51467c81
+File:
+
+https://www.bitcoinfiles.org/aed4adf1e77d2a913af14243beca11ff1c988c9a158db208a83de15f51467c81?
+
+
+Transaction:
+
+https://whatsonchain.com/tx/aed4adf1e77d2a913af14243beca11ff1c988c9a158db208a83de15f51467c81
 
 
 # Usage and Library Examples
