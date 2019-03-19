@@ -7,7 +7,9 @@ Special thanks to Monkeylord and Unwriter for feedback and ideas.
 
 Note: Use the [bitcoinfiles-sdk](https://github.com/BitcoinFiles/bitcoinfiles-sdk#sign-and-create-file) to build, sign, and verify document signatures.
 
-Inspired by the techniques by Monkeylord at https://github.com/monkeylord/bitcoin-ibe
+Inspired by techniques described by Monkeylord at https://github.com/monkeylord/bitcoin-ibe
+
+Built on top and leveraging Bitcoin Data Protocol by Unwriter at https://b.bitdb.network/
 
 # Intro
 
@@ -16,6 +18,7 @@ The design goals:
 1. A simple protocol to sign arbitrary OP_RETURN data in a single transaction
 2. Decouple the signing with an address from the funding source address (ie: does not require any on-chain transactions from the signing identity address)
 3. Allow multiple signatures to be layered on top to provide multi-party contracts.
+
 
 # Use Cases
 
