@@ -2,6 +2,7 @@
 > A simple and flexible method to sign arbitrary OP_RETURN data with Bitcoin ECDSA signatures.
 
 Authors: Attila Aros, Satchmo
+
 Special thanks to Monkeylord and Unwriter for feedback and ideas.
 
 Note: Use the [bitcoinfiles-sdk](https://github.com/BitcoinFiles/bitcoinfiles-sdk#sign-and-create-file) to build, sign, and verify document signatures.
@@ -13,6 +14,18 @@ The design goals:
 1. A simple protocol to sign arbitrary OP_RETURN data in a single transaction
 2. Decouple the signing with an address from the funding source address (ie: does not require any on-chain transactions from the signing identity address)
 3. Allow multiple signatures to be layered on top to provide multi-party contracts.
+
+
+# Use Cases
+
+- Prove ownership and authoring of any file
+- Add multiple signatures to form agreements and contracts
+- Decouple identity from funding addresses
+
+The last point of being able to decouple identity from the funding source addresses means that we can now upload files and content and not have to expose our identity with an on-chain payment transaction.
+
+An example is being able to upload a blog post and using Money Button to pay for the mining fees, yet never exposing your Identity key with an on-chain payment.
+
 
 # Protocol
 
