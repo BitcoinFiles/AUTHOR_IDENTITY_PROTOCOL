@@ -2,8 +2,9 @@
 > A simple and flexible method to sign arbitrary OP_RETURN data with Bitcoin ECDSA signatures.
 
 Authors: Attila Aros, Satchmo
-
 Special thanks to Monkeylord and Unwriter for feedback and ideas.
+
+Note: Use the [bitcoinfiles-sdk](https://github.com/BitcoinFiles/bitcoinfiles-sdk#sign-and-create-file) to build, sign, and verify document signatures.
 
 # Intro
 
@@ -105,9 +106,24 @@ OP_RETURN
 
 ```
 
+# Examples
+
+*Create and Sign a File*
+https://github.com/BitcoinFiles/bitcoinfiles-sdk/blob/master/test/create.js#L128
+
+*Build and Sign a File*
+https://github.com/BitcoinFiles/bitcoinfiles-sdk/blob/master/test/build.js#L16
+
+*Build and Sign a File with 2 Signatures (Contract)*
+https://github.com/BitcoinFiles/bitcoinfiles-sdk/blob/master/test/build.js#L258
+
+*Verify Signature for OP_RETURN fields*:
+https://github.com/BitcoinFiles/bitcoinfiles-sdk/blob/master/test/build.js#L418
+
+*Broadcast Signed File with Datapay*:
+https://github.com/BitcoinFiles/bitcoinfiles-sdk/blob/master/test/build.js#L437
+
 # Libraries
 
 BitcoinFiles SDK has support for directly being able to sign B data files.
-[bitcoinfiles-sdk](https://github.com/BitcoinFiles/bitcoinfiles-sdk)
-
-TODO: Add examples and deep link
+[bitcoinfiles-sdk](https://github.com/BitcoinFiles/bitcoinfiles-sdk#sign-and-create-file)
