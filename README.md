@@ -7,6 +7,8 @@ Special thanks to Monkeylord and Unwriter for feedback and ideas.
 
 Note: Use the [bitcoinfiles-sdk](https://github.com/BitcoinFiles/bitcoinfiles-sdk#sign-and-create-file) to build, sign, and verify document signatures.
 
+Inspired by the techniques by Monkeylord at https://github.com/monkeylord/bitcoin-ibe
+
 # Intro
 
 The design goals:
