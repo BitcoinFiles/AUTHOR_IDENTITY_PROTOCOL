@@ -30,7 +30,6 @@ The last point of being able to decouple identity from the funding source addres
 
 An example is being able to upload a blog post and using Money Button to pay for the mining fees, yet never exposing your Identity key with an on-chain payment.
 
-
 # Protocol
 
 - The prefix for AUTHOR IDENTITY Protocol is `15PciHG22SNLQJXMoSUaWVi7WSqc7hCfva`
@@ -166,6 +165,12 @@ https://github.com/BitcoinFiles/bitcoinfiles-sdk/blob/master/test/build.js#L258
 *Verify Signature for OP_RETURN fields*:
 
 https://github.com/BitcoinFiles/bitcoinfiles-sdk/blob/master/test/build.js#L418
+
+
+*Detect and Verify Signatures for OP_RETURN fields*:
+
+https://github.com/BitcoinFiles/bitcoinfiles-sdk/blob/master/test/utils.js#L569
+
 
 *Broadcast Signed File with Datapay*:
 
