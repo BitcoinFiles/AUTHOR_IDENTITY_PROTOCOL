@@ -29,7 +29,7 @@ An example is being able to upload a blog post and using Money Button to pay for
 
 # Protocol
 
-- The prefix for AUTHOR SIGNATURE Protocol is `15PciHG22SNLQJXMoSUaWVi7WSqc7hCfva`
+- The prefix for AUTHOR IDENTITY Protocol is `15PciHG22SNLQJXMoSUaWVi7WSqc7hCfva`
 
 Here's an example of what **POST transactions** look like:
 
@@ -53,7 +53,7 @@ OP_RETURN
   [Field Index (Field Count - 1)]
 ```
 
-An example with signing [B:// Bitcoin Data](https://github.com/unwriter/B]) is shown, however any arbitrary OP_RETURN content can be signed provided that the fields being signed are before the AUTHOR SIGNATURE `15PciHG22SNLQJXMoSUaWVi7WSqc7hCfva` prefix.
+An example with signing [B:// Bitcoin Data](https://github.com/unwriter/B]) is shown, however any arbitrary OP_RETURN content can be signed provided that the fields being signed are before the AUTHOR IDENTITY `15PciHG22SNLQJXMoSUaWVi7WSqc7hCfva` prefix.
 
 We use the Bitcom convention to use the pipe '|' to indicate the protocol boundary.
 
@@ -62,7 +62,7 @@ Fields:
 1. **Signing Algorithm:** ECDSA - This is the default Bitcoin signing algorithm built into bsv.js. UTF-8 encoding.
 2. **Signing Address:** Bitcoin Address that is used to sign the content. UTF-8 encoding.
 3. **Signature:** The signature of the signed content with the Signing Address. Base64 encoding.
-4. **Field Offset:** An offset used indicate which field position to start looking for fields in the OP_RETURN. This offset is _negative_ relative to the AUTHOR SIGNATURE prefix. Positive integer hex encoding.
+4. **Field Offset:** An offset used indicate which field position to start looking for fields in the OP_RETURN. This offset is _negative_ relative to the AUTHOR IDENTITY prefix. Positive integer hex encoding.
 5. **Field Count:** The total number of fields being signed. The specific field indexes being signed (relative to Field Offset) are listed next. Positive integer hex encoding.
 6. **Field Index <index>:** The specific index (relative to Field Offset) that is covered by the Signature.  Non-negative integer hex encoding.
 
@@ -76,18 +76,18 @@ OP_RETURN
   UTF-8                               // Encoding
   0x00                                // File name (empty in this case with 0x00 to indicate null)
   |                                   // Pipe to seperate protocols
-  15PciHG22SNLQJXMoSUaWVi7WSqc7hCfva, // AUTHOR SIGNATURE prefix
+  15PciHG22SNLQJXMoSUaWVi7WSqc7hCfva, // AUTHOR IDENTITY prefix
   BITCOIN_ECDSA                       // Signing Algorithm
   1EXhSbGFiEAZCE5eeBvUxT6cBVHhrpPWXz, // Signing Address
   0x1b3ffcb62a3bce00c9b4d2d66196d123803e31fa88d0a276c125f3d2524858f4d16bf05479fb1f988b852fe407f39e680a1d6d954afa0051cc34b9d444ee6cb0af, // Signature
-  6 // Negative offset from the left of the AUTHOR SIGNATURE prefix
-  6 // Field Count that follows (in this example we are signing everything before the AUTHOR SIGNATURE prefix
-  0 // OP_RETURN index (-6 + 0) = -6 (relative to AUTHOR SIGNATURE prefix)
-  1 // OP_RETURN index (-6 + 1) = -5 (relative to AUTHOR SIGNATURE prefix)
-  2 // OP_RETURN index (-6 + 2) = -4 (relative to AUTHOR SIGNATURE prefix)
-  3 // OP_RETURN index (-6 + 3) = -3 (relative to AUTHOR SIGNATURE prefix)
-  4 // OP_RETURN index (-6 + 4) = -2 (relative to AUTHOR SIGNATURE prefix)
-  5 // OP_RETURN index (-6 + 5) = -1 (relative to AUTHOR SIGNATURE prefix)
+  6 // Negative offset from the left of the AUTHOR IDENTITY prefix
+  6 // Field Count that follows (in this example we are signing everything before the AUTHOR IDENTITY prefix
+  0 // OP_RETURN index (-6 + 0) = -6 (relative to AUTHOR IDENTITY prefix)
+  1 // OP_RETURN index (-6 + 1) = -5 (relative to AUTHOR IDENTITY prefix)
+  2 // OP_RETURN index (-6 + 2) = -4 (relative to AUTHOR IDENTITY prefix)
+  3 // OP_RETURN index (-6 + 3) = -3 (relative to AUTHOR IDENTITY prefix)
+  4 // OP_RETURN index (-6 + 4) = -2 (relative to AUTHOR IDENTITY prefix)
+  5 // OP_RETURN index (-6 + 5) = -1 (relative to AUTHOR IDENTITY prefix)
 ];
 
 ```
@@ -122,18 +122,23 @@ OP_RETURN
 # Examples
 
 *Create and Sign a File*
+
 https://github.com/BitcoinFiles/bitcoinfiles-sdk/blob/master/test/create.js#L128
 
 *Build and Sign a File*
+
 https://github.com/BitcoinFiles/bitcoinfiles-sdk/blob/master/test/build.js#L16
 
 *Build and Sign a File with 2 Signatures (Contract)*
+
 https://github.com/BitcoinFiles/bitcoinfiles-sdk/blob/master/test/build.js#L258
 
 *Verify Signature for OP_RETURN fields*:
+
 https://github.com/BitcoinFiles/bitcoinfiles-sdk/blob/master/test/build.js#L418
 
 *Broadcast Signed File with Datapay*:
+
 https://github.com/BitcoinFiles/bitcoinfiles-sdk/blob/master/test/build.js#L437
 
 # Libraries
