@@ -52,7 +52,7 @@ OP_RETURN
   [Field Index (Field Count - 1)]
 ```
 
-An example with signing [B:// Bitcoin Data](https://github.com/unwriter/B]) is shown, however any arbitrary OP_RETURN content can be signed provided that the fields being signed are before the AUTHOR IDENTITY `15PciHG22SNLQJXMoSUaWVi7WSqc7hCfva` prefix.
+An example with signing [B:// Bitcoin Data](https://github.com/unwriter/B) is shown, however any arbitrary OP_RETURN content can be signed provided that the fields being signed are before the AUTHOR IDENTITY `15PciHG22SNLQJXMoSUaWVi7WSqc7hCfva` prefix.
 
 We use the Bitcom convention to use the pipe '|' to indicate the protocol boundary.
 
@@ -120,7 +120,7 @@ OP_RETURN
 
 # Transaction Examples
 
-*1 signature*:
+##### 1 signature
 
 File:
 
@@ -132,7 +132,7 @@ Transaction:
 https://whatsonchain.com/tx/bd5b707d4ab4caef96ff45296738c648e9d9db82ba0df2377eb95a8a6bf7e6a9?
 
 
-*2 signatures*:
+##### 2 signatures
 
 File:
 
