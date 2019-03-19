@@ -54,7 +54,7 @@ OP_RETURN
 
 An example with signing [B:// Bitcoin Data](https://github.com/unwriter/B) is shown, however any arbitrary OP_RETURN content can be signed provided that the fields being signed are before the AUTHOR IDENTITY `15PciHG22SNLQJXMoSUaWVi7WSqc7hCfva` prefix.
 
-We use the Bitcom convention to use the pipe '|' to indicate the protocol boundary.
+We use the [Bitcom](https://bitcom.bitdb.network) convention to use the pipe '|' to indicate the protocol boundary.
 
 Fields:
 
