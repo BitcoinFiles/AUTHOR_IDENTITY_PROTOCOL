@@ -3,7 +3,7 @@
 
 Authors: Attila Aros, Satchmo
 
-Special thanks to Monkeylord and Unwriter for feedback and ideas.
+Special thanks to Monkeylord, Unwriter, and Libitx for feedback and ideas.
 
 Note: Use the [bitcoinfiles-sdk](https://github.com/BitcoinFiles/bitcoinfiles-sdk#sign-and-create-file) to build, sign, and verify document signatures.
 
@@ -48,12 +48,9 @@ OP_RETURN
   [Signing Algorithm]
   [Signing Address]
   [Signature]
-  [Field Offset]
-  [Field Count]
-  [Field Index 0]
+  [Field Index 0] // 0 based index means the OP_RETURN (0x6a) is signed itself
   [Field Index 1]
   ...
-  [Field Index (Field Count - 1)]
 ```
 
 An example with signing [B:// Bitcoin Data](https://github.com/unwriter/B) is shown, however any arbitrary OP_RETURN content can be signed provided that the fields being signed are before the AUTHOR IDENTITY `15PciHG22SNLQJXMoSUaWVi7WSqc7hCfva` prefix.
@@ -65,9 +62,9 @@ Fields:
 1. **Signing Algorithm:** ECDSA - This is the default Bitcoin signing algorithm built into bsv.js. UTF-8 encoding.
 2. **Signing Address:** Bitcoin Address that is used to sign the content. UTF-8 encoding.
 3. **Signature:** The signature of the signed content with the Signing Address. Base64 encoding.
-4. **Field Offset:** An offset used indicate which field position to start looking for fields in the OP_RETURN. This offset is _negative_ relative to the AUTHOR IDENTITY prefix. Positive integer hex encoding.
-5. **Field Count:** The total number of fields being signed. The specific field indexes being signed (relative to Field Offset) are listed next. Positive integer hex encoding.
-6. **Field Index <index>:** The specific index (relative to Field Offset) that is covered by the Signature.  Non-negative integer hex encoding.
+4. **Field Index <index>:** The specific index (relative to Field Offset) that is covered by the Signature.  Non-negative integer hex encoding.
+
+_NOTE: THE LIBRARY ASSUMES THAT THE 0'th INDEX IS THE OP_RETURN(0x6a)._
 
 Example:
 
@@ -83,14 +80,13 @@ OP_RETURN
   BITCOIN_ECDSA                       // Signing Algorithm
   1EXhSbGFiEAZCE5eeBvUxT6cBVHhrpPWXz, // Signing Address
   0x1b3ffcb62a3bce00c9b4d2d66196d123803e31fa88d0a276c125f3d2524858f4d16bf05479fb1f988b852fe407f39e680a1d6d954afa0051cc34b9d444ee6cb0af, // Signature
-  6 // Negative offset from the left of the AUTHOR IDENTITY prefix
-  6 // Field Count that follows (in this example we are signing everything before the AUTHOR IDENTITY prefix
-  0 // OP_RETURN index (-6 + 0) = -6 (relative to AUTHOR IDENTITY prefix)
-  1 // OP_RETURN index (-6 + 1) = -5 (relative to AUTHOR IDENTITY prefix)
-  2 // OP_RETURN index (-6 + 2) = -4 (relative to AUTHOR IDENTITY prefix)
-  3 // OP_RETURN index (-6 + 3) = -3 (relative to AUTHOR IDENTITY prefix)
-  4 // OP_RETURN index (-6 + 4) = -2 (relative to AUTHOR IDENTITY prefix)
-  5 // OP_RETURN index (-6 + 5) = -1 (relative to AUTHOR IDENTITY prefix)
+  0,  // OP_RETURN 6a
+  1,  // 19HxigV4QyBv3tHpQVcUEQyq1pzZVdoAut
+  2,  // { "message": "Hello world!" }
+  3,  // applciation/json
+  4,  // UTF-8
+  5,  // 0x00
+  6   // | 
 ];
 
 ```
@@ -98,8 +94,8 @@ OP_RETURN
 In Hex form:
 ```
 
-OP_RETURN
 [
+  '0x6a', /// OP_RETURN
   '0x31394878696756345179427633744870515663554551797131707a5a56646f417574',
   '0x7b20226d657373616765223a202248656c6c6f20776f726c6421227d',
   '0x6170706c69636174696f6e2f6a736f6e',
@@ -110,14 +106,13 @@ OP_RETURN
   '0x424954434f494e5f4543445341',
   '0x31455868536247466945415a4345356565427655785436634256486872705057587a',
   '0x1b3ffcb62a3bce00c9b4d2d66196d123803e31fa88d0a276c125f3d2524858f4d16bf05479fb1f988b852fe407f39e680a1d6d954afa0051cc34b9d444ee6cb0af',
-  '0x06',
-  '0x06',
   '0x00',
   '0x01',
   '0x02',
   '0x03',
   '0x04',
-  '0x05'
+  '0x05',
+  '0x06'
 ]
 
 ```
@@ -128,24 +123,24 @@ OP_RETURN
 
 File:
 
-https://www.bitcoinfiles.org/bd5b707d4ab4caef96ff45296738c648e9d9db82ba0df2377eb95a8a6bf7e6a9?
+https://www.bitcoinfiles.org/db61b9a0a31142825a9f2f1c48543299f72c974b5e4c44335c4357abfdeac753
 
 
 Transaction:
 
-https://whatsonchain.com/tx/bd5b707d4ab4caef96ff45296738c648e9d9db82ba0df2377eb95a8a6bf7e6a9?
+https://whatsonchain.com/tx/db61b9a0a31142825a9f2f1c48543299f72c974b5e4c44335c4357abfdeac753
 
 
 ##### 2 signatures
 
 File:
 
-https://www.bitcoinfiles.org/aed4adf1e77d2a913af14243beca11ff1c988c9a158db208a83de15f51467c81?
+https://www.bitcoinfiles.org/d4738845dc0d045a35c72fcacaa2d4dee19a3be1cbfcb0d333ce2aec6f0de311
 
 
 Transaction:
 
-https://whatsonchain.com/tx/aed4adf1e77d2a913af14243beca11ff1c988c9a158db208a83de15f51467c81
+https://whatsonchain.com/tx/d4738845dc0d045a35c72fcacaa2d4dee19a3be1cbfcb0d333ce2aec6f0de311
 
 
 # Usage and Library Examples
@@ -160,21 +155,21 @@ https://github.com/BitcoinFiles/bitcoinfiles-sdk/blob/master/test/build.js#L16
 
 *Build and Sign a File with 2 Signatures (Contract)*
 
-https://github.com/BitcoinFiles/bitcoinfiles-sdk/blob/master/test/build.js#L258
+https://github.com/BitcoinFiles/bitcoinfiles-sdk/blob/master/test/build.js#L277
 
 *Verify Signature for OP_RETURN fields*:
 
-https://github.com/BitcoinFiles/bitcoinfiles-sdk/blob/master/test/build.js#L418
+https://github.com/BitcoinFiles/bitcoinfiles-sdk/blob/master/test/build.js#L413
 
 
 *Detect and Verify Signatures for OP_RETURN fields*:
 
-https://github.com/BitcoinFiles/bitcoinfiles-sdk/blob/master/test/utils.js#L569
+https://github.com/BitcoinFiles/bitcoinfiles-sdk/blob/master/test/utils.js#L665
 
 
 *Broadcast Signed File with Datapay*:
 
-https://github.com/BitcoinFiles/bitcoinfiles-sdk/blob/master/test/build.js#L437
+https://github.com/BitcoinFiles/bitcoinfiles-sdk/blob/master/test/build.js#L435
 
 # Libraries
 
