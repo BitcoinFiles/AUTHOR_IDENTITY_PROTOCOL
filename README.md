@@ -1,15 +1,13 @@
 # AUTHOR IDENTITY PROTOCOL
 > A simple and flexible method to sign arbitrary OP_RETURN data with Bitcoin ECDSA signatures.
 
+AIP was designed to be a modular, and flexible signing protocol. This means it can be used in conjunction with other Bitcoin Data Protocols, like the [B protocol](https://b.bitdb.network/) by Unwriter
+
 Authors: Attila Aros, Satchmo
 
-Special thanks to Monkeylord, Unwriter, and Libitx for feedback and ideas.
+Special thanks to Monkeylord, Unwriter, Libitx, and Gal Buki for feedback and ideas.
 
-Note: Use the [bitcoinfiles-sdk](https://github.com/BitcoinFiles/bitcoinfiles-sdk#sign-and-create-file) to build, sign, and verify document signatures.
-
-Inspired by techniques described by Monkeylord at https://github.com/monkeylord/bitcoin-ibe
-
-Built on top and leveraging Bitcoin Data Protocol by Unwriter at https://b.bitdb.network/
+Note: Use the [bitcoinfiles-sdk](https://github.com/BitcoinFiles/bitcoinfiles-sdk#sign-and-create-file) to build, sign, and verify document signatures in Javascript, and [https://github.com/rohenaz/go-aip](go-aip) for Go.
 
 # Intro
 
@@ -18,12 +16,13 @@ The design goals:
 1. A simple protocol to sign arbitrary OP_RETURN data in a single transaction
 2. Decouple the signing with an address from the funding source address (ie: does not require any on-chain transactions from the signing identity address)
 3. Allow multiple signatures to be layered on top to provide multi-party contracts.
-
+4. Flexible enough to support future signing schemes with similar structure
 
 # Use Cases
 
 - Prove ownership and authoring of any file
 - Add multiple signatures to form agreements and contracts
+- Sign data against a paymail identity
 - Decouple identity from funding addresses
 
 The last point of being able to decouple identity from the funding source addresses means that we can now upload files and content and not have to expose our identity with an on-chain payment transaction.
@@ -50,7 +49,7 @@ OP_RETURN
   [Signature]
   [Field Index 0] // Optional. 0 based index means the OP_RETURN (0x6a) is signed itself
   [Field Index 1] // Optional.
-  ...             // If the Field Indexes are omitted, then it's assumed that all fields to the left of the AUTHOR_IDENTITY prefix are signed.
+  ...             // If the Field Indexes are omitted, then it's assumed that all fields, beginning with and including OP_RETURN, and continuing to (but not including) the AUTHOR_IDENTITY prefix are signed. This also includes the pipe (protocol separator) just before the AIP prefix.
 ```
 
 An example with signing [B:// Bitcoin Data](https://github.com/unwriter/B) is shown, however any arbitrary OP_RETURN content can be signed provided that the fields being signed are before the AUTHOR IDENTITY `15PciHG22SNLQJXMoSUaWVi7WSqc7hCfva` prefix.
@@ -59,12 +58,17 @@ We use the [Bitcom](https://bitcom.bitdb.network) convention to use the pipe '|'
 
 Fields:
 
-1. **Signing Algorithm:** ECDSA - This is the default Bitcoin signing algorithm built into bsv.js. UTF-8 encoding.
-2. **Signing Address:** Bitcoin Address that is used to sign the content. UTF-8 encoding.
+1. **Signing Algorithm:** 
+
+    - "BITCOIN_ECDSA" refers to [Bitcoin Signed Message protocol](https://docs.moneybutton.com/docs/bsv-message.html) which is the default Bitcoin signing algorithm built into bsv.js. UTF-8 encoding.
+    - "BITCOIN_ECDSA_HASH" is the same as BITCOIN_ECDSA, except the data being signed is a SHA256 hash of the raw data.
+    - "BITCOIN_ECDSA_PAYMAIL" refers to Bitcoin Signed Message protocol where the address field is a paymail address, consistent with [paymail signatures](https://docs.moneybutton.com/docs/mb-signatures.html). 
+    
+2. **Signing Address:** Bitcoin Address, Paymail address, or public key being used to sign the content (depending on signature algorithm being used). UTF-8 encoding.
 3. **Signature:** The signature of the signed content with the Signing Address. Base64 encoding.
 4. **Field Index <index>:** (Optional) The specific index (relative to Field Offset) that is covered by the Signature.  Non-negative integer hex encoding. When there are no indexes provided, it is assumed that all fields to the left of the AUTHOR IDENTITY prefix are signed.
 
-_NOTE: THE LIBRARY ASSUMES THAT THE 0'th INDEX IS THE OP_RETURN(0x6a)._
+_NOTE: THE 0'th INDEX IS THE OP_RETURN(0x6a), even when OP_FALSE (0x00) precedes OP_RETURN._
 
 Example:
 
@@ -136,6 +140,29 @@ In Hex form (by implicitly signing all fields)
 
 ```
 
+##### Paymail Example - Signing data against a paymail address
+
+*In this example, indicies are ommitted, meaning we sign all data up to the AIP prefix, including the OP_RETURN and the "|", but not OP_FALSE*
+
+Example:
+
+```
+OP_FALSE
+OP_RETURN
+  19HxigV4QyBv3tHpQVcUEQyq1pzZVdoAut  // B Prefix
+  { "message": "Hello world!" }       // Content
+  applciation/json                    // Content Type
+  UTF-8                               // Encoding
+  0x00                                // File name (empty in this case with 0x00 to indicate null)
+  |                                   // Pipe to seperate protocols
+  15PciHG22SNLQJXMoSUaWVi7WSqc7hCfva, // AUTHOR IDENTITY prefix
+  PAYMAIL                             // Signing Algorithm
+  satchmo@moneybutton.com             // Signing Address
+  0x1b3ffcb62a3bce00c9b4d2d66196d123803e31fa88d0a276c125f3d2524858f4d16bf05479fb1f988b852fe407f39e680a1d6d954afa0051cc34b9d444ee6cb0af, // Signature
+];
+
+```
+
 # Transaction Examples
 
 ##### 1 signature
@@ -202,5 +229,6 @@ https://github.com/BitcoinFiles/bitcoinfiles-sdk/blob/master/test/build.js#L292
 
 # Libraries
 
-BitcoinFiles SDK has support for directly being able to sign B data files.
-[bitcoinfiles-sdk](https://github.com/BitcoinFiles/bitcoinfiles-sdk#sign-and-create-file)
+[go-aip]( (Golang)
+[BitcoinFiles SDK](https://github.com/BitcoinFiles/bitcoinfiles-sdk#sign-and-create-file) (Javascript)
+
